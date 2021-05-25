@@ -249,11 +249,13 @@ identifyOverExpressedGenes <- function(object, data.use = NULL, group.by = NULL,
     }
   }
 
-  my.sapply <- ifelse(
-    test = future::nbrOfWorkers() == 1,
-    yes = pbapply::pbsapply,
-    no = future.apply::future_sapply
-  )
+  my.sapply <- future.apply::future_sapply
+
+  # my.sapply <- ifelse(
+  #   test = future::nbrOfWorkers() == 1,
+  #   yes = pbapply::pbsapply,
+  #   no = future.apply::future_sapply
+  # )
 
   mean.fxn <- function(x) {
     return(log(x = mean(x = expm1(x = x)) + 1))
@@ -402,11 +404,14 @@ identifyOverExpressedLigandReceptor <- function(object, features.name = "feature
     markers.all <- subset(markers.all, subset = features %in% features.use)
   }
 
-  my.sapply <- ifelse(
-    test = future::nbrOfWorkers() == 1,
-    yes = pbapply::pbsapply,
-    no = future.apply::future_sapply
-  )
+  my.sapply <- future.apply::future_sapply
+
+  # my.sapply <- ifelse(
+  #   test = future::nbrOfWorkers() == 1,
+  #   yes = pbapply::pbsapply,
+  #   no = future.apply::future_sapply
+  # )
+
   complexSubunits <- complex_input[, grepl("subunit" , colnames(complex_input))]
 
   markers.all.new <- data.frame()
@@ -477,11 +482,17 @@ identifyOverExpressedInteractions <- function(object, features.name = "features"
 
   interaction_input <- DB$interaction
   complex_input <- DB$complex
-  my.sapply <- ifelse(
-    test = future::nbrOfWorkers() == 1,
-    yes = pbapply::pbsapply,
-    no = future.apply::future_sapply
-  )
+  
+
+  my.sapply <- future.apply::future_sapply
+
+  # my.sapply <- ifelse(
+  #   test = future::nbrOfWorkers() == 1,
+  #   yes = pbapply::pbsapply,
+  #   no = future.apply::future_sapply
+  # )
+
+
   complexSubunits <- complex_input[, grepl("subunit" , colnames(complex_input))]
   index.sig <- unlist(
     x = my.sapply(
