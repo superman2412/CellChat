@@ -56,11 +56,14 @@ computeCommunProb <- function(object, type = c("triMean", "truncatedMean", "medi
   }
   complex_input <- object@DB$complex
   cofactor_input <- object@DB$cofactor
-  my.sapply <- ifelse(
-    test = future::nbrOfWorkers() == 1,
-    yes = sapply,
-    no = future.apply::future_sapply
-  )
+  
+  my.sapply <- future.apply::future_sapply
+
+  # my.sapply <- ifelse(
+  #   test = future::nbrOfWorkers() == 1,
+  #   yes = pbapply::pbsapply,
+  #   no = future.apply::future_sapply
+  # )
 
   ptm = Sys.time()
 
@@ -535,11 +538,16 @@ computeAveExpr <- function(object, features = NULL, group.by = NULL, type = c("t
 #' @export
 computeExpr_complex <- function(complex_input, data.use, complex) {
   Rsubunits <- complex_input[complex,] %>% dplyr::select(starts_with("subunit"))
-  my.sapply <- ifelse(
-    test = future::nbrOfWorkers() == 1,
-    yes = sapply,
-    no = future.apply::future_sapply
-  )
+  
+  my.sapply <- future.apply::future_sapply
+
+  # my.sapply <- ifelse(
+  #   test = future::nbrOfWorkers() == 1,
+  #   yes = pbapply::pbsapply,
+  #   no = future.apply::future_sapply
+  # )
+
+
   data.complex = my.sapply(
     X = 1:nrow(Rsubunits),
     FUN = function(x) {
@@ -566,11 +574,17 @@ computeExpr_complex <- function(complex_input, data.use, complex) {
 # #' @export
 .computeExprGroup_complex <- function(complex_input, data.use, complex, group, FunMean) {
   Rsubunits <- complex_input[complex,] %>% dplyr::select(starts_with("subunit"))
-  my.sapply <- ifelse(
-    test = future::nbrOfWorkers() == 1,
-    yes = pbapply::pbsapply,
-    no = future.apply::future_sapply
-  )
+  
+
+  my.sapply <- future.apply::future_sapply
+
+  # my.sapply <- ifelse(
+  #   test = future::nbrOfWorkers() == 1,
+  #   yes = pbapply::pbsapply,
+  #   no = future.apply::future_sapply
+  # )
+
+
   data.complex = my.sapply(
     X = 1:nrow(Rsubunits),
     FUN = function(x) {
@@ -638,11 +652,16 @@ computeExpr_coreceptor <- function(cofactor_input, data.use, pairLRsig, type = c
   }
   index.coreceptor <- which(!is.na(coreceptor.all) & coreceptor.all != "")
   if (length(index.coreceptor) > 0) {
-    my.sapply <- ifelse(
-      test = future::nbrOfWorkers() == 1,
-      yes = sapply,
-      no = future.apply::future_sapply
-    )
+    
+  my.sapply <- future.apply::future_sapply
+
+  # my.sapply <- ifelse(
+  #   test = future::nbrOfWorkers() == 1,
+  #   yes = pbapply::pbsapply,
+  #   no = future.apply::future_sapply
+  # )
+
+
     coreceptor <- coreceptor.all[index.coreceptor]
     coreceptor.ind <- cofactor_input[coreceptor, grepl("cofactor" , colnames(cofactor_input) )]
     data.coreceptor.ind = my.sapply(
@@ -691,11 +710,17 @@ computeExpr_coreceptor <- function(cofactor_input, data.use, pairLRsig, type = c
   }
   index.coreceptor <- which(!is.na(coreceptor.all) & coreceptor.all != "")
   if (length(index.coreceptor) > 0) {
-    my.sapply <- ifelse(
-      test = future::nbrOfWorkers() == 1,
-      yes = pbapply::pbsapply,
-      no = future.apply::future_sapply
-    )
+    
+
+  my.sapply <- future.apply::future_sapply
+
+  # my.sapply <- ifelse(
+  #   test = future::nbrOfWorkers() == 1,
+  #   yes = pbapply::pbsapply,
+  #   no = future.apply::future_sapply
+  # )
+
+
     coreceptor <- coreceptor.all[index.coreceptor]
     coreceptor.ind <- cofactor_input[coreceptor, grepl("cofactor" , colnames(cofactor_input) )]
     data.coreceptor.ind = my.sapply(
@@ -990,4 +1015,3 @@ identifyEnrichedInteractions <- function(object, from, to, bidirection = FALSE, 
   }
   return(pairLR.use0)
 }
-
