@@ -634,13 +634,14 @@ netEmbedding <- function(object, slot.name = "netP", type = c("functional","stru
   }
   options(warn = -1)
   # dimension reduction
-  Y <- runUMAP(Similarity, min.dist = 0.3, n.neighbors = k)
+  Y <- umap(Similarity, min_dist = 0.3, n_neighbors = k)
   if (!is.list(methods::slot(object, slot.name)$similarity[[type]]$dr)) {
     methods::slot(object, slot.name)$similarity[[type]]$dr <- NULL
   }
   methods::slot(object, slot.name)$similarity[[type]]$dr[[comparison.name]] <- Y
   return(object)
 }
+
 
 
 #' Classification learning of the signaling networks
