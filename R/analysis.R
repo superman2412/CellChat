@@ -178,11 +178,16 @@ netAnalysis_computeCentrality <- function(object = NULL, slot.name = "netP", net
   }
   if (length(dim(net)) == 3) {
     nrun <- dim(net)[3]
-    my.sapply <- ifelse(
-      test = future::nbrOfWorkers() == 1,
-      yes = pbapply::pbsapply,
-      no = future.apply::future_sapply
-    )
+   
+   my.sapply <- future.apply::future_sapply
+
+   # my.sapply <- ifelse(
+   #   test = future::nbrOfWorkers() == 1,
+   #   yes = pbapply::pbsapply,
+   #   no = future.apply::future_sapply
+   # )
+
+
     centr.all = my.sapply(
       X = 1:nrun,
       FUN = function(x) {
@@ -684,12 +689,16 @@ netClustering <- function(object, slot.name = "netP", type = c("functional","str
         future::plan("multiprocess", workers = nCores)
         options(future.globals.maxSize = 1000 * 1024^2)
       }
-      my.sapply <- ifelse(
-        test = future::nbrOfWorkers() == 1,
-        yes = pbapply::pbsapply,
-        no = future.apply::future_sapply
-      )
-      results = my.sapply(
+   
+   my.sapply <- future.apply::future_sapply
+
+   # my.sapply <- ifelse(
+   #   test = future::nbrOfWorkers() == 1,
+   #   yes = pbapply::pbsapply,
+   #   no = future.apply::future_sapply
+   # )
+
+     results = my.sapply(
         X = 1:length(kRange),
         FUN = function(x) {
           idents <- kmeans(data.use,kRange[x],nstart=10)$cluster
@@ -2672,6 +2681,7 @@ netMappingDEG <- function(object, features.name, thresh = 0.05) {
   # net <- dplyr::select[net, -c("source.ligand", "target.receptor")]
   return(net)
 }
+
 
 
 
