@@ -1,0 +1,192 @@
+---
+title: "Seurat: Lung Adenocarcinoma scRNA-seq Processing, QC, Normalization"
+output: html_notebook
+---
+
+
+
+
+```{r}
+#Load package dependecies
+library(R.utils)
+library(Seurat)
+library(tidyverse)
+```
+
+
+```{r}
+#Load data into R
+
+mat <- readRDS("../Data/GSE131907_Lung_Cancer_raw_UMI_matrix.rds")
+
+head(mat)
+```
+
+#Move the data into a Seurat object
+
+```{r}
+seurat <- CreateSeuratObject (counts = mat, 
+                              min.cells = 3,
+                              project = 'Lung_adenocarcinoma_scRNA_seq',
+                              min.features = 200)
+```
+
+```{r}
+#read in annotation/metadata file and how this annotation file looks like
+annotation_file=read.table("../Data/GSE131907_Lung_Cancer_cell_annotation.txt.gz",sep='\t',header=T)
+
+head(annotation_file)
+```
+
+```{r}
+#deal with anno matrix a little bit by removing the leftmost row which has numbers as you can see on preceding code chunk top
+rownames(annotation_file)=annotation_file[,1]
+
+head(annotation_file)
+```
+
+```{r}
+#Adding all the meta data information into seurat object
+seurat$Index=annotation_file[colnames(seurat),'Index']
+
+seurat$Barcode=annotation_file[colnames(seurat),'Barcode']
+
+seurat$Sample=annotation_file[colnames(seurat),'Sample']
+
+seurat$Sample_Origin=annotation_file[colnames(seurat),'Sample_Origin']
+
+seurat$Cell_type=annotation_file[colnames(seurat),'Cell_type']
+
+seurat$Cell_type.refined=annotation_file[colnames(seurat),'Cell_type.refined']
+
+seurat$Cell_subtype=annotation_file[colnames(seurat),'Cell_subtype']
+```
+
+
+```{r}
+head(seurat)
+```
+
+```{r}
+table(seurat$Cell_type)
+```
+
+
+```{r}
+#now we have added the information, we can check by the following code
+#we have 'celltype' now
+names(seurat@meta.data)
+```
+
+```{r}
+#this checks how many cells in each celltype
+table(seurat@meta.data$Cell_subtype)
+```
+
+#Quality control and filtering 
+
+#Three main ones that we look at
+
+#How many unique genes are detected in a cell, we can't have cells with 5 genes for example
+
+#How many unique molecules did we measure in every cell? Cells die/viability > loose lot of RNA content > #of unique molecules / cell tends to decrease drastically. 
+
+
+```{r}
+#create a new column called percentage of mitochondrial gene as percent.mito in the seurat object called seurat
+
+#using the PercentageFeatureSet function , tell the function where to look (give it the seurat object), and to tell what kind of genes to look for tell it "MT^" since we want it to look for mitochondrial genome
+
+#we are using Mitochondrial genome as an indicator of viability since as the cytoplasmic RNA is lost only mitochondrial RNA is left
+
+
+seurat[["percent.mito"]] <- PercentageFeatureSet(seurat, pattern = "^MT-")
+```
+
+
+
+```{r}
+
+#Seurat likes to use the word Feature as genes
+
+#nFeature_RNA is the number of unique genes
+
+#nCountRNA is the number of unique transcripts
+
+VlnPlot(seurat, 
+        features = c("nFeature_RNA","nCount_RNA", "percent.mito"),
+        pt.size = 0.25, 
+        ncol = 3)
+
+#bad quality datasets is may be a couple of hundred detected genes 
+```
+
+
+
+```{r}
+#its good to cut off the distribution to sort of make it look normal. 
+hist(seurat$percent.mito, breaks = 200)
+```
+
+
+```{r}
+#Look at association between the number of genes in a cell and percentage of mitochondrial genes in that cel.
+
+#There's a suggestion that high percentage of mitochondrial genes is associated with death / low cell viability which will also suggest less number of unique genes
+
+#As the number of genes increases these cells tend to have a 
+
+#Seuratobject is a complex data structure and contains a lot of stuff. You can access stuff e.g. metadata within the Seurat object by seurat@metadata
+
+qplot(x=nFeature_RNA, y=percent.mito, data=seurat@meta.data)
+
+#always be cautious, there's a risk that you might be being extremely selective. T cells for example are known to be expression extremely low number of genes
+
+#always be soft on filtering, NOT aggressive #its always better, there's low risk of missing out on cell populations 
+```
+
+Filter out genes with percent.mito > 12.5.
+
+Inspect your data and decide what's best 
+
+
+```{r}
+
+#we only want to keep cells with low mitochondrial reads and high enough number of genes
+
+#What you are writing is what you wanna keep not what you wanna remove 
+
+seurat <- subset(seurat, 
+                 subset = percent.mito < 12.5 & 
+                   
+                  nFeature_RNA > 200)
+```
+
+
+#Normalization
+
+
+Library sized scaling. Cell 1: Gene A 10, Cell 2: Gene B 20. It might be that you sequenced gene B twice. Therefore its an artificial duplication size. Therefore, the sum of all counts get divided by the number of total counts. /10,000 counts. So you want the sum of all counts in every cell to add to 10,000. 
+
+Log transformation. A lot of tools assume that the data is normally distribution. As we saw before, most of the data is heavily skewed. Therefore, in order for the data to look normal we log transform it after which it looks log normal. 
+
+```{r}
+#normalize the data.
+seurat <- NormalizeData(seurat)
+```
+
+
+```{r}
+#Save processed Seurat file as RDS object. 
+saveRDS(seurat, file="../Output/Lung_adenocarcinoma_seurat_CellChat_NormalizedOnly.rds")
+```
+
+
+
+
+
+
+
+
+
+
