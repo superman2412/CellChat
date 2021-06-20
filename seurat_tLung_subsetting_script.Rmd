@@ -1,0 +1,174 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(Seurat)
+```
+
+
+```{r}
+lung_carcinoma_seurat <- readRDS("/Users/soumyasharma/Desktop/Studies/MS_Systems_Biology/Project_2/Seurat_data_center/Main_file/lung_adenocarcinoma_seurat_for_CellChat_NormalizedOnly.rds")
+```
+
+
+```{r}
+tLung_lung_carcinoma_seurat <- subset(x = lung_carcinoma_seurat, subset = (Sample_Origin == "tLung"))
+```
+
+```{r}
+tLung_lung_carcinoma_seurat_Activated_DCs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ("Activated DCs")))
+
+tLung_lung_carcinoma_seurat_Alveolar_Mac <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ( "Alveolar Mac")))
+
+tLung_lung_carcinoma_seurat_CD141DCs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "CD141+ DCs")))
+
+tLung_lung_carcinoma_seurat_CD163CD14DCs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ("CD163+CD14+ DCs")))
+
+tLung_lung_carcinoma_seurat_CD1cDCs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ( "CD1c+ DCs")))
+
+tLung_lung_carcinoma_seurat_CD207CD1aLCs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ( "CD207+CD1a+ LCs")))
+
+tLung_lung_carcinoma_seurat_CD4Th <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (   "CD4+ Th")))
+
+tLung_lung_carcinoma_seurat_CD8lowT <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ("CD8 low T")))
+
+tLung_lung_carcinoma_seurat_CD8CD4MixedTh <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "CD8+/CD4+ Mixed Th")))
+
+tLung_lung_carcinoma_seurat_COL13A1matrixFBs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ( "COL13A1+ matrix FBs")))
+
+tLung_lung_carcinoma_seurat_COL14A1matrixFBs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ("COL14A1+ matrix FBs")))
+
+tLung_lung_carcinoma_seurat_CytotoxicCD8T <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Cytotoxic CD8+ T")))
+
+tLung_lung_carcinoma_seurat_EPCs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "EPCs")))
+
+tLung_lung_carcinoma_seurat_ExhaustedCD8T <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Exhausted CD8+ T")))
+
+tLung_lung_carcinoma_seurat_ExhaustedTfh <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ("Exhausted Tfh")))
+
+tLung_lung_carcinoma_seurat_FollicularBcells <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ("Follicular B cells")))
+
+tLung_lung_carcinoma_seurat_GCBcellsintheDZ <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ("GC B cells in the DZ")))
+
+tLung_lung_carcinoma_seurat_GCBcellsintheLZ <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "GC B cells in the LZ")))
+
+tLung_lung_carcinoma_seurat_LymphaticECs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ("Lymphatic ECs")))
+
+tLung_lung_carcinoma_seurat_MALTBcells <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ("MALT B cells")))
+
+tLung_lung_carcinoma_seurat_MAST <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ("MAST")))
+
+tLung_lung_carcinoma_seurat_Mesothelialcells <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Mesothelial cells")))
+
+tLung_lung_carcinoma_seurat_moMac <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == ( "mo-Mac")))
+
+tLung_lung_carcinoma_seurat_Monocytes <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Monocytes")))
+
+tLung_lung_carcinoma_seurat_Myofibroblasts <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Myofibroblasts")))
+
+tLung_lung_carcinoma_seurat_NaiveCD4T <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Naive CD4+ T")))
+
+tLung_lung_carcinoma_seurat_NaiveCD8T <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Naive CD8+ T")))
+
+tLung_lung_carcinoma_seurat_NK <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "NK")))
+
+tLung_lung_carcinoma_seurat_pDCs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "pDCs")))
+
+tLung_lung_carcinoma_seurat_Pericytes <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Pericytes")))
+
+tLung_lung_carcinoma_seurat_Plasmacells <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Plasma cells")))
+
+tLung_lung_carcinoma_seurat_PleuralMac <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Pleural Mac")))
+
+tLung_lung_carcinoma_seurat_Smoothmusclecells <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Smooth muscle cells")))
+
+tLung_lung_carcinoma_seurat_StalklikeECs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Stalk-like ECs")))
+
+tLung_lung_carcinoma_seurat_TiplikeECs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Tip-like ECs")))
+
+tLung_lung_carcinoma_seurat_Treg <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Treg")))
+
+tLung_lung_carcinoma_seurat_tS1 <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "tS1")))
+
+tLung_lung_carcinoma_seurat_tS2 <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "tS2")))
+
+tLung_lung_carcinoma_seurat_tS3 <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "tS3")))
+
+tLung_lung_carcinoma_seurat_TumorECs <- subset(x = tLung_lung_carcinoma_seurat, subset = (Cell_subtype == (  "Tumor ECs")))
+```
+
+```{r}
+tLung_lung_carcinoma_seurat_all_cells <- merge(tLung_lung_carcinoma_seurat_Activated_DCs, y = c(tLung_lung_carcinoma_seurat_TumorECs,
+                                                                                                tLung_lung_carcinoma_seurat_tS3,
+                                                                                                tLung_lung_carcinoma_seurat_tS2,
+                                                                                                tLung_lung_carcinoma_seurat_tS1,
+                                                                                                tLung_lung_carcinoma_seurat_Treg,
+                                                                                                tLung_lung_carcinoma_seurat_TiplikeECs,
+                                                                                                tLung_lung_carcinoma_seurat_StalklikeECs,
+                                                                                                tLung_lung_carcinoma_seurat_Smoothmusclecells,
+                                                                                                tLung_lung_carcinoma_seurat_PleuralMac,
+                                                                                                tLung_lung_carcinoma_seurat_Plasmacells,
+                                                                                                tLung_lung_carcinoma_seurat_Pericytes,
+                                                                                                tLung_lung_carcinoma_seurat_pDCs,
+                                                                                                tLung_lung_carcinoma_seurat_NK,
+                                                                                                tLung_lung_carcinoma_seurat_NaiveCD8T,
+                                                                                                tLung_lung_carcinoma_seurat_NaiveCD4T,
+                                                                                                tLung_lung_carcinoma_seurat_Myofibroblasts,
+                                                                                                tLung_lung_carcinoma_seurat_Monocytes,
+                                                                                                tLung_lung_carcinoma_seurat_moMac,
+                                                                                                tLung_lung_carcinoma_seurat_Mesothelialcells,
+                                                                                                tLung_lung_carcinoma_seurat_MAST,
+                                                                                                tLung_lung_carcinoma_seurat_MALTBcells,
+                                                                                                tLung_lung_carcinoma_seurat_LymphaticECs,
+                                                                                                tLung_lung_carcinoma_seurat_GCBcellsintheLZ,
+                                                                                                tLung_lung_carcinoma_seurat_GCBcellsintheDZ,
+                                                                                                tLung_lung_carcinoma_seurat_FollicularBcells,
+                                                                                                tLung_lung_carcinoma_seurat_ExhaustedTfh,
+                                                                                                tLung_lung_carcinoma_seurat_ExhaustedCD8T,
+                                                                                                tLung_lung_carcinoma_seurat_EPCs,
+                                                                                                tLung_lung_carcinoma_seurat_CytotoxicCD8T,
+                                                                                                tLung_lung_carcinoma_seurat_COL14A1matrixFBs,
+                                                                                                tLung_lung_carcinoma_seurat_COL13A1matrixFBs,
+                                                                                                tLung_lung_carcinoma_seurat_CD8CD4MixedTh,
+                                                                                                tLung_lung_carcinoma_seurat_CD8lowT,
+                                                                                                tLung_lung_carcinoma_seurat_CD4Th,
+                                                                                                tLung_lung_carcinoma_seurat_CD207CD1aLCs,
+                                                                                                tLung_lung_carcinoma_seurat_CD1cDCs,
+                                                                                                tLung_lung_carcinoma_seurat_CD163CD14DCs,
+                                                                                                tLung_lung_carcinoma_seurat_CD141DCs,
+                                                                                                tLung_lung_carcinoma_seurat_Alveolar_Mac
+                                                                                                ))
+```
+
+```{r}
+tLung_lung_carcinoma_seurat_T_EC_cells <- merge(tLung_lung_carcinoma_seurat_CD4Th, y = c(tLung_lung_carcinoma_seurat_TumorECs,
+                                                                                                tLung_lung_carcinoma_seurat_Treg,
+                                                                                                tLung_lung_carcinoma_seurat_TiplikeECs,
+                                                                                                tLung_lung_carcinoma_seurat_StalklikeECs,
+                                                                                                tLung_lung_carcinoma_seurat_Pericytes,
+                                                                                                tLung_lung_carcinoma_seurat_NaiveCD8T,
+                                                                                                tLung_lung_carcinoma_seurat_NaiveCD4T,
+                                                                                                tLung_lung_carcinoma_seurat_LymphaticECs,
+                                                                                                tLung_lung_carcinoma_seurat_ExhaustedTfh,
+                                                                                                tLung_lung_carcinoma_seurat_ExhaustedCD8T,
+                                                                                                tLung_lung_carcinoma_seurat_EPCs,
+                                                                                                tLung_lung_carcinoma_seurat_CytotoxicCD8T,
+                                                                                                tLung_lung_carcinoma_seurat_CD8CD4MixedTh,
+                                                                                                tLung_lung_carcinoma_seurat_CD8lowT
+                                                                                                
+                                                                                                ))
+```
+
+
+```{r}
+saveRDS(tLung_lung_carcinoma_seurat_T_EC_cells, file ="/Users/soumyasharma/Desktop/Studies/MS_Systems_Biology/Project_2/Seurat_data_center/EC_T_Cells_Seurat_Objects/tLung_lung_carcinoma_seurat_T_EC_cells.rds")
+```
+
+```{r}
+saveRDS(tLung_lung_carcinoma_seurat_all_cells, file ="/Users/soumyasharma/Desktop/Studies/MS_Systems_Biology/Project_2/Seurat_data_center/All_cells_Seurat_Objects/tLung_lung_carcinoma_seurat_all_cells.rds")
+```
+
+
